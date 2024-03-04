@@ -39,6 +39,7 @@ public interface Executor {
   <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler,
       CacheKey cacheKey, BoundSql boundSql) throws SQLException;
 
+  // W：这个查询目前有两个实现类 BaseExecutor 和 CachingExecutor
   <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler)
       throws SQLException;
 

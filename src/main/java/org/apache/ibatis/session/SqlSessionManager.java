@@ -254,6 +254,7 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
     return sqlSessionProxy.delete(statement, parameter);
   }
 
+  // W: 获取方法的入口
   @Override
   public <T> T getMapper(Class<T> type) {
     return getConfiguration().getMapper(type, this);

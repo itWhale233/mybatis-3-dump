@@ -54,6 +54,7 @@ public class MapperMethod {
     this.method = new MethodSignature(config, mapperInterface, method);
   }
 
+  // W: 包装的反射方法执行的时候判断当前使什么类型的查询
   public Object execute(SqlSession sqlSession, Object[] args) {
     Object result;
     switch (command.getType()) {
@@ -140,8 +141,11 @@ public class MapperMethod {
   private <E> Object executeForMany(SqlSession sqlSession, Object[] args) {
     List<E> result;
     Object param = method.convertArgsToSqlCommandParam(args);
+    // W：判断当前方法中的参数是否包含 RowBounds 来进行分页查询
     if (method.hasRowBounds()) {
+      // W：展开解析 RowBounds 对象
       RowBounds rowBounds = method.extractRowBounds(args);
+      // W：调用 sqlSession 的查询方法进行查询
       result = sqlSession.selectList(command.getName(), param, rowBounds);
     } else {
       result = sqlSession.selectList(command.getName(), param);
@@ -247,6 +251,7 @@ public class MapperMethod {
       return type;
     }
 
+    // W：通过 Mapper 接口获取 MappedStatement
     private MappedStatement resolveMappedStatement(Class<?> mapperInterface, String methodName, Class<?> declaringClass,
         Configuration configuration) {
       String statementId = mapperInterface.getName() + "." + methodName;

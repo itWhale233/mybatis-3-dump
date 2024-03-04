@@ -46,6 +46,7 @@ public class SqlSessionFactoryBuilder {
 
   public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
     try {
+      // W: 获取 SqlSession 第一步：通过配置文件/配置类构建 SqlSessionFactory
       XMLConfigBuilder parser = new XMLConfigBuilder(reader, environment, properties);
       return build(parser.parse());
     } catch (Exception e) {
@@ -93,6 +94,7 @@ public class SqlSessionFactoryBuilder {
   }
 
   public SqlSessionFactory build(Configuration config) {
+    // W：获取 SqlSession 第二步：实际将会返回 DefaultSqlSessionFactory 这个工厂
     return new DefaultSqlSessionFactory(config);
   }
 

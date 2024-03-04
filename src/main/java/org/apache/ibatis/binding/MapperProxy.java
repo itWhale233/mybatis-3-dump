@@ -92,7 +92,9 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
   private MapperMethodInvoker cachedInvoker(Method method) throws Throwable {
     try {
       return MapUtil.computeIfAbsent(methodCache, method, m -> {
+        // W: 指定 Mapper 接口不存在指定方法
         if (!m.isDefault()) {
+          // W：构建 MapperMethod 对象用于反射
           return new PlainMethodInvoker(new MapperMethod(mapperInterface, method, sqlSession.getConfiguration()));
         }
         try {
