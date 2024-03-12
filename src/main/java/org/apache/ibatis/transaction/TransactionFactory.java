@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 
 /**
+ * W：事务工厂，用来创建事务，包含两个工厂实现（JdbcTransactionFactory 和 ManagedTransactionFactory）
  * Creates {@link Transaction} instances.
  *
  * @author Clinton Begin
@@ -41,6 +42,7 @@ public interface TransactionFactory {
 
   /**
    * Creates a {@link Transaction} out of an existing connection.
+   * W：新建一个事务
    *
    * @param conn
    *          Existing database connection

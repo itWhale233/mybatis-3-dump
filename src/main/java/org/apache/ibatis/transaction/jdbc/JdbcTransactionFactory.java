@@ -46,6 +46,7 @@ public class JdbcTransactionFactory implements TransactionFactory {
     }
   }
 
+  // W：基于 JDBC 的事务实现
   @Override
   public Transaction newTransaction(Connection conn) {
     return new JdbcTransaction(conn);

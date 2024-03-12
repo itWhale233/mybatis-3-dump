@@ -305,6 +305,7 @@ public class XMLConfigBuilder extends BaseBuilder {
     for (XNode child : context.getChildren()) {
       String id = child.getStringAttribute("id");
       if (isSpecifiedEnvironment(id)) {
+        // W：获取事务管理器的配置
         TransactionFactory txFactory = transactionManagerElement(child.evalNode("transactionManager"));
         DataSourceFactory dsFactory = dataSourceElement(child.evalNode("dataSource"));
         DataSource dataSource = dsFactory.getDataSource();
@@ -338,8 +339,10 @@ public class XMLConfigBuilder extends BaseBuilder {
 
   private TransactionFactory transactionManagerElement(XNode context) throws Exception {
     if (context != null) {
+      // W：根据 type 来实例化事务管理器类型
       String type = context.getStringAttribute("type");
       Properties props = context.getChildrenAsProperties();
+      // W：根据类型实例化
       TransactionFactory factory = (TransactionFactory) resolveClass(type).getDeclaredConstructor().newInstance();
       factory.setProperties(props);
       return factory;
