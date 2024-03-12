@@ -245,6 +245,7 @@ class PooledConnection implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String methodName = method.getName();
+    // W：反射方法是 close 连接方法，实际上并不是真正关闭，而是将链接放回连接池中
     if (CLOSE.equals(methodName)) {
       dataSource.pushConnection(this);
       return null;
