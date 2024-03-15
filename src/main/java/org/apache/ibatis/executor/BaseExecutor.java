@@ -194,15 +194,23 @@ public abstract class BaseExecutor implements Executor {
     }
   }
 
+
+  /**
+   * W：创建缓存 Key 的方法，Mybatis 中确定一级缓存 key 的规则
+   * W：statementId + rowBounds + 传递给JDBC的SQL + 传递给JDBC的参数值；
+   */
   @Override
   public CacheKey createCacheKey(MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql) {
     if (closed) {
       throw new ExecutorException("Executor was closed.");
     }
     CacheKey cacheKey = new CacheKey();
+    // W：条件1 statementId
     cacheKey.update(ms.getId());
+    // W：条件2 分页参数
     cacheKey.update(rowBounds.getOffset());
     cacheKey.update(rowBounds.getLimit());
+    // W：条件3 产生的 SQL
     cacheKey.update(boundSql.getSql());
     List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
     TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration().getTypeHandlerRegistry();
@@ -224,11 +232,13 @@ public abstract class BaseExecutor implements Executor {
           }
           value = metaObject.getValue(propertyName);
         }
+        // W：条件4 查询的参数
         cacheKey.update(value);
       }
     }
     if (configuration.getEnvironment() != null) {
       // issue #176
+      // W：二级缓存可能出现的问题 不同数据源同类名及前 4 个条件的情况下还得参考当前配置环境
       cacheKey.update(configuration.getEnvironment().getId());
     }
     return cacheKey;
