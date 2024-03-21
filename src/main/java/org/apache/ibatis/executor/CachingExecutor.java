@@ -33,12 +33,15 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
 
 /**
+ * W:使用了装饰模式，持有 Executor ，增强其方法
  * @author Clinton Begin
  * @author Eduardo Macarron
  */
 public class CachingExecutor implements Executor {
 
   private final Executor delegate;
+
+  // W:默认使用 TransactionalCacheManager 这个缓存管理器
   private final TransactionalCacheManager tcm = new TransactionalCacheManager();
 
   public CachingExecutor(Executor delegate) {
